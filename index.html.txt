@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GlobalPrice</title>
+</head>
+<body>
+
+<h2>GlobalPrice 🌍</h2>
+
+<label>Producto:</label>
+<select id="producto">
+  <option value="audifonos">Audífonos</option>
+  <option value="mouse">Mouse</option>
+</select>
+
+<br><br>
+
+<label>País destino:</label>
+<select id="pais">
+  <option value="peru">Perú</option>
+  <option value="mexico">México</option>
+</select>
+
+<br><br>
+
+<button onclick="calcular()">Calcular</button>
+
+<h3 id="resultado"></h3>
+
+<script>
+function calcular() {
+  let producto = document.getElementById("producto").value;
+  let pais = document.getElementById("pais").value;
+
+  let precios = {
+    audifonos: { usa: 40, china: 25 },
+    mouse: { usa: 20, china: 12 }
+  };
+
+  let tipoCambio = {
+    peru: 3.8,
+    mexico: 17
+  };
+
+  let envio = 10;
+  let impuesto = 0.18;
+
+  let resultadoTexto = "";
+
+  for (let origen in precios[producto]) {
+    let precioUSD = precios[producto][origen];
+    let total = (precioUSD + envio) * tipoCambio[pais];
+    total = total + (total * impuesto);
+
+    resultadoTexto += origen.toUpperCase() + ": " + total.toFixed(2) + "<br>";
+  }
+
+  document.getElementById("resultado").innerHTML = resultadoTexto;
+}
+</script>
+
+</body>
+</html>
