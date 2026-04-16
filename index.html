@@ -1,61 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>GlobalPrice</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, select, button {
+      width: 90%;
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background: black;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    .resultado {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .producto {
+      background: #fafafa;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>GlobalPrice 🌍</h2>
+<div class="container">
+  <h2>🌍 GlobalPrice</h2>
 
-<label>Producto:</label>
-<select id="producto">
-  <option value="audifonos">Audífonos</option>
-  <option value="mouse">Mouse</option>
-</select>
+  <input type="text" id="busqueda" placeholder="Buscar producto... (ej: audifonos)">
 
-<br><br>
+  <select id="pais">
+    <option value="peru">Perú</option>
+    <option value="mexico">México</option>
+    <option value="chile">Chile</option>
+  </select>
 
-<label>País destino:</label>
-<select id="pais">
-  <option value="peru">Perú</option>
-  <option value="mexico">México</option>
-</select>
+  <button onclick="calcular()">Buscar</button>
 
-<br><br>
-
-<button onclick="calcular()">Calcular</button>
-
-<h3 id="resultado"></h3>
+  <div id="resultado" class="resultado"></div>
+</div>
 
 <script>
-function calcular() {
-  let producto = document.getElementById("producto").value;
-  let pais = document.getElementById("pais").value;
+let productos = [
+  { nombre: "audifonos sony", usa: 50, china: 30 },
+  { nombre: "audifonos jbl", usa: 45, china: 28 },
+  { nombre: "mouse logitech", usa: 25, china: 15 },
+  { nombre: "teclado mecanico redragon", usa: 70, china: 50 },
+  { nombre: "laptop hp", usa: 900, china: 700 },
+  { nombre: "celular samsung", usa: 800, china: 600 }
+];
 
-  let precios = {
-    audifonos: { usa: 40, china: 25 },
-    mouse: { usa: 20, china: 12 }
-  };
+function calcular() {
+  let busqueda = document.getElementById("busqueda").value.toLowerCase();
+  let pais = document.getElementById("pais").value;
 
   let tipoCambio = {
     peru: 3.8,
-    mexico: 17
+    mexico: 17,
+    chile: 900
   };
 
   let envio = 10;
   let impuesto = 0.18;
 
-  let resultadoTexto = "";
+  let resultadoHTML = "";
 
-  for (let origen in precios[producto]) {
-    let precioUSD = precios[producto][origen];
-    let total = (precioUSD + envio) * tipoCambio[pais];
-    total = total + (total * impuesto);
+  productos.forEach(p => {
+    if (p.nombre.includes(busqueda)) {
 
-    resultadoTexto += origen.toUpperCase() + ": " + total.toFixed(2) + "<br>";
+      let totalUSA = (p.usa + envio) * tipoCambio[pais];
+      totalUSA += totalUSA * impuesto;
+
+      let totalChina = (p.china + envio) * tipoCambio[pais];
+      totalChina += totalChina * impuesto;
+
+      let mejorOpcion = totalUSA < totalChina ? "🇺🇸 USA" : "🇨🇳 China";
+
+      resultadoHTML += `
+        <div class="producto">
+          <b>${p.nombre}</b><br>
+          🇺🇸 USA: ${totalUSA.toFixed(2)}<br>
+          🇨🇳 China: ${totalChina.toFixed(2)}<br>
+          👉 Mejor opción: <b>${mejorOpcion}</b>
+        </div>
+      `;
+    }
+  });
+
+  if (resultadoHTML === "") {
+    resultadoHTML = "❌ No se encontraron productos";
   }
 
-  document.getElementById("resultado").innerHTML = resultadoTexto;
+  document.getElementById("resultado").innerHTML = resultadoHTML;
 }
 </script>
 
