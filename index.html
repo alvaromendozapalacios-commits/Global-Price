@@ -1,56 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>GlobalPrice</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f5f5;
-      text-align: center;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<title>GlobalPrice</title>
 
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+<style>
+body {
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
 
-    input, select, button {
-      width: 90%;
-      padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
+.container {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+}
 
-    button {
-      background: black;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+}
 
-    button:hover {
-      background: #333;
-    }
+button {
+  background: #22c55e;
+  color: white;
+  font-weight: bold;
+}
 
-    .resultado {
-      margin-top: 20px;
-      text-align: left;
-    }
+.producto {
+  background: #1e293b;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 10px;
+  text-align: left;
+}
 
-    .producto {
-      background: #fafafa;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-  </style>
+img {
+  width: 100%;
+  border-radius: 10px;
+}
+</style>
+
 </head>
 
 <body>
@@ -58,7 +53,7 @@
 <div class="container">
   <h2>🌍 GlobalPrice</h2>
 
-  <input type="text" id="busqueda" placeholder="Buscar producto... (ej: audifonos)">
+  <input type="text" id="busqueda" placeholder="Buscar producto...">
 
   <select id="pais">
     <option value="peru">Perú</option>
@@ -68,17 +63,41 @@
 
   <button onclick="calcular()">Buscar</button>
 
-  <div id="resultado" class="resultado"></div>
+  <div id="resultado"></div>
 </div>
 
 <script>
 let productos = [
-  { nombre: "audifonos sony", usa: 50, china: 30 },
-  { nombre: "audifonos jbl", usa: 45, china: 28 },
-  { nombre: "mouse logitech", usa: 25, china: 15 },
-  { nombre: "teclado mecanico redragon", usa: 70, china: 50 },
-  { nombre: "laptop hp", usa: 900, china: 700 },
-  { nombre: "celular samsung", usa: 800, china: 600 }
+  {
+    nombre: "audifonos sony",
+    usa: 50,
+    china: 30,
+    imagen: "https://via.placeholder.com/300x200?text=Audifonos+Sony"
+  },
+  {
+    nombre: "mouse logitech",
+    usa: 25,
+    china: 15,
+    imagen: "https://via.placeholder.com/300x200?text=Mouse+Logitech"
+  },
+  {
+    nombre: "teclado mecanico",
+    usa: 70,
+    china: 50,
+    imagen: "https://via.placeholder.com/300x200?text=Teclado"
+  },
+  {
+    nombre: "laptop hp",
+    usa: 900,
+    china: 700,
+    imagen: "https://via.placeholder.com/300x200?text=Laptop"
+  },
+  {
+    nombre: "celular samsung",
+    usa: 800,
+    china: 600,
+    imagen: "https://via.placeholder.com/300x200?text=Celular"
+  }
 ];
 
 function calcular() {
@@ -105,14 +124,15 @@ function calcular() {
       let totalChina = (p.china + envio) * tipoCambio[pais];
       totalChina += totalChina * impuesto;
 
-      let mejorOpcion = totalUSA < totalChina ? "🇺🇸 USA" : "🇨🇳 China";
+      let mejor = totalUSA < totalChina ? "🇺🇸 USA" : "🇨🇳 China";
 
       resultadoHTML += `
         <div class="producto">
-          <b>${p.nombre}</b><br>
+          <img src="${p.imagen}">
+          <h3>${p.nombre}</h3>
           🇺🇸 USA: ${totalUSA.toFixed(2)}<br>
           🇨🇳 China: ${totalChina.toFixed(2)}<br>
-          👉 Mejor opción: <b>${mejorOpcion}</b>
+          👉 Mejor opción: <b>${mejor}</b>
         </div>
       `;
     }
